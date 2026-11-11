@@ -27,13 +27,14 @@
   .search span{font-size:18px}
   .search input{flex:1;border:0;outline:0;font-size:16px;padding:14px 8px;background:transparent;color:var(--ink)}
   .search button{border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;display:none}
-  .chips{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 6px;scrollbar-width:none}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;padding:14px 14px 6px;max-width:720px;margin:0 auto}
   .chips::-webkit-scrollbar{display:none}
   .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink);
-    padding:8px 13px;border-radius:999px;font-size:14px;cursor:pointer;white-space:nowrap}
+    padding:8px 12px;border-radius:999px;font-size:14px;cursor:pointer;white-space:nowrap}
   .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
   .meta{display:flex;justify-content:space-between;align-items:center;padding:6px 18px;
     color:var(--muted);font-size:13px}
+  .notice{margin:4px 14px 2px;padding:10px 12px;border-radius:12px;background:#fff4e8;color:#8a4b12;font-size:13px;line-height:1.4;max-width:692px}
   main{padding:4px 14px 110px;max-width:720px;margin:0 auto}
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 14px 12px;
     margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
@@ -46,8 +47,11 @@
   .tag{font-size:12px;padding:4px 9px;border-radius:999px;background:#f6efe7;color:#6b5a4a}
   .tag.check{background:#fff4dc;color:var(--warn)}
   .tag.open{background:#e3f5ea;color:var(--ok)}
+  .tag.warn{background:#fff0e0;color:#b8580f}
   .tag.closed{background:#fbe4e1;color:var(--bad)}
+  .info{margin:8px 0 0;font-size:13px;color:#5f574f;line-height:1.4}
   .actions{display:flex;gap:8px;margin-top:12px}
+  .nocontact{margin:10px 0 0;font-size:12.5px;color:var(--muted);line-height:1.4}
   .btn{flex:1;text-align:center;text-decoration:none;font-size:14px;padding:10px 6px;border-radius:11px;
     border:1px solid var(--line);color:var(--ink);background:#fff;cursor:pointer;font-family:inherit}
   .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
@@ -88,6 +92,7 @@
 
 <div class="chips" id="chips"></div>
 <div class="meta"><span id="count"></span><span>Updated Nov 2026</span></div>
+<div class="notice">⚠️ Info is shared by members and may change. Please check the map or call before you go.</div>
 
 <main id="list"></main>
 <footer>Made with ❤️ by the Xiamen Foodies group</footer>
@@ -157,7 +162,7 @@ function copyText(text){
 
 /* Map links that work in China (no VPN needed) */
 function mapLinks(r){
-  var kw = encodeURIComponent(r.address || r.name);
+  var kw = encodeURIComponent(r.mapq || r.address || r.name);
   return [
     {label:"高德地图 Amap", url:"https://uri.amap.com/search?keyword="+kw+"&city=350200&src=xiamenfoodies"},
     {label:"百度地图 Baidu Maps", url:"https://api.map.baidu.com/place/search?query="+kw+"&region="+encodeURIComponent("厦门")+"&output=html&src=xiamenfoodies"},
@@ -176,9 +181,9 @@ function openMapSheet(r){
 function closeSheet(){ $("sheet").classList.remove("show"); }
 
 function statusTag(r){
-  if(r.status==="open") return '<span class="tag open">✅ Open</span>';
   if(r.status==="closed") return '<span class="tag closed">❌ Closed</span>';
-  return '<span class="tag check">❓ Not checked yet</span>';
+  if(r.status==="unverified") return '<span class="tag warn">⚠️ Location not verified</span>';
+  return '';
 }
 
 function card(r, i){
@@ -186,14 +191,19 @@ function card(r, i){
   var h = '<div class="card"><div class="top"><div class="emoji">'+c.emoji+'</div><div>'
         + '<p class="name">'+esc(r.name)+'</p><p class="cuisine">'+esc(r.cuisine)+'</p></div></div>'
         + '<div class="tags">'+statusTag(r)
+        + (r.multi?'<span class="tag warn">📍 Several branches - check before going</span>':'')
         + (r.area?'<span class="tag">📍 '+esc(r.area)+'</span>':'')
-        + (r.price?'<span class="tag">'+esc(r.price)+'</span>':'')
-        + '</div><div class="actions">'
+        + '</div>'
+        + (r.note?'<p class="info">💬 '+esc(r.note)+'</p>':'')
+        + (r.address?'<p class="info">📍 '+esc(r.address)+'</p>':'')
+        + (r.hours?'<p class="info">🕘 '+esc(r.hours)+'</p>':'')
+        + '<div class="actions">'
         + '<button class="btn primary" data-map="'+R.indexOf(r)+'">📍 Map</button>';
   if(r.phone) h += '<a class="btn" href="tel:'+esc(r.phone.replace(/\s/g,""))+'">📞 Call</a>';
   if(r.wechat) h += '<button class="btn" data-wx="'+esc(r.wechat)+'">💬 WeChat</button>';
-  if(!r.phone && !r.wechat) h += '<button class="btn ghost" data-form="1">➕ Add contact</button>';
-  h += '</div></div>';
+  h += '</div>';
+  if(!r.phone && !r.wechat) h += '<p class="nocontact">📞 No contact yet - if you have their phone or WeChat, feel free to share it in the group 🙏</p>';
+  h += '</div>';
   return h;
 }
 
@@ -201,7 +211,7 @@ function matches(r){
   if(state.cat!=="all" && r.cat!==state.cat) return false;
   if(!state.q) return true;
   var c = catById[r.cat];
-  var hay = [r.name,r.cuisine,r.area,r.tags,c?c.label:""].join(" ").toLowerCase();
+  var hay = [r.name,r.cuisine,r.area,r.address,r.note,r.tags,c?c.label:""].join(" ").toLowerCase();
   return state.q.toLowerCase().split(/\s+/).every(function(w){return hay.indexOf(w)>-1});
 }
 
