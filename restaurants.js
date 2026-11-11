@@ -6,7 +6,7 @@
    Fields you can use (all optional except name, cuisine, cat):
      name:    "Restaurant name"
      cuisine: "Type of food"
-     cat:     brunch | italian | mexican | indian | asian |
+     cat:     brunch | italian | mexican | indian | asian | chinese |
               korean | european | western | fusion
      area:    "SM2", "Shapowei", "Zhongshan Rd" ...
      address: "Full address (中文 is best for maps)"
@@ -72,6 +72,7 @@ var R = [
   {name:"Dai Mei 傣妹早晚点", cuisine:"Dai / Yunnan rice noodles", cat:"asian", area:"Xiahe Rd", address:"思明区厦禾路规划9大同学府F1层", mapq:"傣妹早晚点 思北店", hours:"11:00 - 16:30, 17:30 - 21:00", tags:"chinese noodles yunnan dai"},
   {name:"Dai Tai 傣泰", cuisine:"Yunnan / Dai & Thai", cat:"asian", area:"Jianye Rd", address:"思明区建业路18号阳明楼F1层", mapq:"Dai Tai 傣泰", hours:"11:30 - 14:00, 17:30 - 22:00", tags:"chinese yunnan dai thai"},
   // Korean
+  {name:"Lao Chongqing 老重庆新港店", cuisine:"Sichuan / Chongqing", cat:"chinese", area:"Hubin North Rd (Xingang Plaza)", address:"思明区湖滨北路18号新港广场东楼D1", mapq:"老重庆新港店", hours:"11:00 - 14:00, 17:00 - 22:30", tags:"chinese sichuan chongqing spicy laziji la zi ji old chongqing"},
   {name:"首锦屋炸鸡·年糕火锅", cuisine:"Korean fried chicken / Tteokbokki hotpot", cat:"korean", area:"Jimei", address:"集美区岑东路148号", mapq:"首锦屋炸鸡年糕火锅", hours:"11:00 - 14:00, 16:30 - 21:00", tags:"chicken hotpot korean jimei"},
   {name:"Yanqing 焰请烤肉铺子", cuisine:"Korean BBQ", cat:"korean", area:"Jimei - Joy City", address:"集美区杏林湾路33号厦门大悦城5楼", mapq:"焰请烤肉铺子 厦门大悦城店", hours:"10:00 - 24:00", tags:"bbq barbecue korean joy city jimei service", note:"Excellent service - Haidilao level"},
   // European

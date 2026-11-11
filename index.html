@@ -49,6 +49,9 @@
   .tag.open{background:#e3f5ea;color:var(--ok)}
   .tag.warn{background:#fff0e0;color:#b8580f}
   .tag.closed{background:#fbe4e1;color:var(--bad)}
+  .addr{display:flex;align-items:flex-start;gap:6px}
+  .addr span{flex:1}
+  .copy{flex:0 0 auto;border:1px solid var(--line);background:#f6f1eb;color:var(--ink);border-radius:8px;font-size:12px;padding:3px 8px;cursor:pointer;font-family:inherit}
   .info{margin:8px 0 0;font-size:13px;color:#5f574f;line-height:1.4}
   .actions{display:flex;gap:8px;margin-top:12px}
   .nocontact{margin:10px 0 0;font-size:12.5px;color:var(--muted);line-height:1.4}
@@ -104,7 +107,7 @@
   <div class="sheet-bg" data-close="1"></div>
   <div class="sheet-box">
     <p class="sheet-title" id="sheetTitle"></p>
-    <p class="sheet-sub">Open in your map app:</p>
+    <p class="sheet-sub">Open in your map app (or use 📋 Copy on the address):</p>
     <div id="sheetLinks"></div>
     <button class="sheet-cancel" data-close="1">Cancel</button>
   </div>
@@ -124,6 +127,7 @@ var CATS = [
   {id:"mexican",  label:"Mexican & Latin",   emoji:"🌮"},
   {id:"indian",   label:"Indian & Middle East", emoji:"🍛"},
   {id:"asian",    label:"Asian",             emoji:"🥢"},
+  {id:"chinese",  label:"Chinese",           emoji:"🥟"},
   {id:"korean",   label:"Korean",            emoji:"🍗"},
   {id:"european", label:"European",          emoji:"🫒"},
   {id:"western",  label:"Western & BBQ",     emoji:"🥩"},
@@ -148,8 +152,8 @@ function openForm(){
   else { toast("Form coming soon - send updates in the WeChat group for now 🙏"); }
 }
 
-function copyText(text){
-  function ok(){toast("WeChat ID copied: "+text)}
+function copyText(text, msg){
+  function ok(){toast(msg || ("WeChat ID copied: "+text))}
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(ok,fallback);
   } else fallback();
@@ -165,9 +169,7 @@ function mapLinks(r){
   var kw = encodeURIComponent(r.mapq || r.address || r.name);
   return [
     {label:"高德地图 Amap", url:"https://uri.amap.com/search?keyword="+kw+"&city=350200&src=xiamenfoodies"},
-    {label:"百度地图 Baidu Maps", url:"https://api.map.baidu.com/place/search?query="+kw+"&region="+encodeURIComponent("厦门")+"&output=html&src=xiamenfoodies"},
-    {label:"Apple Maps (iPhone)", url:"https://maps.apple.com/?q="+kw+"&near="+encodeURIComponent("Xiamen")},
-    {label:"Google Maps (needs VPN)", url:"https://www.google.com/maps/search/?api=1&query="+kw+encodeURIComponent(" Xiamen")}
+    {label:"百度地图 Baidu Maps", url:"https://api.map.baidu.com/place/search?query="+kw+"&region="+encodeURIComponent("厦门")+"&output=html&src=xiamenfoodies"}
   ];
 }
 
@@ -195,7 +197,7 @@ function card(r, i){
         + (r.area?'<span class="tag">📍 '+esc(r.area)+'</span>':'')
         + '</div>'
         + (r.note?'<p class="info">💬 '+esc(r.note)+'</p>':'')
-        + (r.address?'<p class="info">📍 '+esc(r.address)+'</p>':'')
+        + (r.address?'<p class="info addr">📍 <span>'+esc(r.address)+'</span><button class="copy" data-copy="'+esc(r.address)+'">📋 Copy</button></p>':'')
         + (r.hours?'<p class="info">🕘 '+esc(r.hours)+'</p>':'')
         + '<div class="actions">'
         + '<button class="btn primary" data-map="'+R.indexOf(r)+'">📍 Map</button>';
@@ -241,6 +243,7 @@ $("chips").addEventListener("click", function(e){
 document.addEventListener("click", function(e){
   var mp=e.target.closest("[data-map]"); if(mp){openMapSheet(R[+mp.getAttribute("data-map")]); return}
   if(e.target.closest("[data-close]")){closeSheet(); return}
+  var cp=e.target.closest("[data-copy]"); if(cp){copyText(cp.getAttribute("data-copy"),"Address copied ✅"); return}
   var wx=e.target.closest("[data-wx]"); if(wx){copyText(wx.getAttribute("data-wx")); return}
   if(e.target.closest("[data-form]")) openForm();
 });
