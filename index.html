@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Xiamen Foodies</title>
+<style>
+  :root{
+    --bg:#fff8f0; --card:#ffffff; --ink:#2b2118; --muted:#8a7a6b;
+    --brand:#e8562a; --brand-soft:#ffe6dc; --line:#f0e3d6;
+    --ok:#2e9d5b; --warn:#c98a12; --bad:#c0392b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",Arial,sans-serif;
+    -webkit-text-size-adjust:100%}
+  header{background:var(--brand);color:#fff;padding:calc(22px + env(safe-area-inset-top)) 18px 18px;
+    border-radius:0 0 22px 22px}
+  header h1{margin:0;font-size:26px;letter-spacing:.3px}
+  header p{margin:4px 0 14px;opacity:.9;font-size:14px}
+  .search{display:flex;align-items:center;background:#fff;border-radius:14px;padding:0 12px;
+    box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .search span{font-size:18px}
+  .search input{flex:1;border:0;outline:0;font-size:16px;padding:14px 8px;background:transparent;color:var(--ink)}
+  .search button{border:0;background:none;font-size:18px;color:var(--muted);cursor:pointer;display:none}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:8px 13px;border-radius:999px;font-size:14px;cursor:pointer;white-space:nowrap}
+  .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .meta{display:flex;justify-content:space-between;align-items:center;padding:6px 18px;
+    color:var(--muted);font-size:13px}
+  main{padding:4px 14px 110px;max-width:720px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;
+    margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .top{display:flex;gap:12px;align-items:flex-start}
+  .emoji{font-size:26px;width:44px;height:44px;flex:0 0 44px;border-radius:12px;
+    background:var(--brand-soft);display:flex;align-items:center;justify-content:center}
+  .name{font-weight:700;font-size:17px;margin:0}
+  .cuisine{color:var(--muted);font-size:14px;margin:2px 0 0}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+  .tag{font-size:12px;padding:4px 9px;border-radius:999px;background:#f6efe7;color:#6b5a4a}
+  .tag.check{background:#fff4dc;color:var(--warn)}
+  .tag.open{background:#e3f5ea;color:var(--ok)}
+  .tag.closed{background:#fbe4e1;color:var(--bad)}
+  .actions{display:flex;gap:8px;margin-top:12px}
+  .btn{flex:1;text-align:center;text-decoration:none;font-size:14px;padding:10px 6px;border-radius:11px;
+    border:1px solid var(--line);color:var(--ink);background:#fff;cursor:pointer;font-family:inherit}
+  .btn.primary{background:var(--brand-soft);border-color:var(--brand-soft);color:#a83a17;font-weight:600}
+  .btn.ghost{color:var(--muted);border-style:dashed}
+  .empty{text-align:center;color:var(--muted);padding:40px 10px}
+  .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));
+    background:var(--ink);color:#fff;border:0;border-radius:999px;padding:14px 22px;font-size:15px;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer;font-family:inherit;white-space:nowrap}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(43,33,24,.92);
+    color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;
+    pointer-events:none;max-width:86%;text-align:center}
+  .toast.show{opacity:1}
+  .sheet{position:fixed;inset:0;display:none;z-index:20}
+  .sheet.show{display:block}
+  .sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+  .sheet-box{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;
+    padding:18px 16px calc(16px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto}
+  .sheet-title{font-weight:700;font-size:17px;margin:0}
+  .sheet-sub{color:var(--muted);font-size:13px;margin:4px 0 12px}
+  .sheet-link{display:block;text-decoration:none;color:var(--ink);background:var(--brand-soft);
+    padding:14px;border-radius:12px;margin:8px 0;font-size:16px;font-weight:600;text-align:center}
+  .sheet-cancel{width:100%;border:0;background:#f3ece4;color:var(--muted);padding:13px;border-radius:12px;
+    font-size:15px;margin-top:6px;font-family:inherit;cursor:pointer}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 0}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🍜 Xiamen Foodies</h1>
+  <p>Where to eat in Xiamen, recommended by the group</p>
+  <div class="search">
+    <span>🔍</span>
+    <input id="q" type="search" placeholder="Search a place or food… e.g. pizza, thai" autocomplete="off">
+    <button id="clear" aria-label="Clear">✕</button>
+  </div>
+</header>
+
+<div class="chips" id="chips"></div>
+<div class="meta"><span id="count"></span><span>Updated Nov 2026</span></div>
+
+<main id="list"></main>
+<footer>Made with ❤️ by the Xiamen Foodies group</footer>
+
+<button class="fab" id="fab">➕ Add a place / Report closed</button>
+<div class="toast" id="toast"></div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-box">
+    <p class="sheet-title" id="sheetTitle"></p>
+    <p class="sheet-sub">Open in your map app:</p>
+    <div id="sheetLinks"></div>
+    <button class="sheet-cancel" data-close="1">Cancel</button>
+  </div>
+</div>
+
+<script src="restaurants.js"></script>
+<script>
+/* ===== SETTINGS ===== */
+// Paste your free form link here (腾讯问卷 / 金数据) when it's ready:
+var FORM_URL = "";
+
+/* ===== CATEGORIES ===== */
+var CATS = [
+  {id:"all",      label:"All",               emoji:"🍽️"},
+  {id:"brunch",   label:"Brunch & Café",     emoji:"🥐"},
+  {id:"italian",  label:"Italian & Pizza",   emoji:"🍕"},
+  {id:"mexican",  label:"Mexican & Latin",   emoji:"🌮"},
+  {id:"indian",   label:"Indian & Middle East", emoji:"🍛"},
+  {id:"asian",    label:"Asian",             emoji:"🥢"},
+  {id:"korean",   label:"Korean",            emoji:"🍗"},
+  {id:"european", label:"European",          emoji:"🫒"},
+  {id:"western",  label:"Western & BBQ",     emoji:"🥩"},
+  {id:"fusion",   label:"Fusion",            emoji:"✨"}
+];
+
+/* ===== APP ===== */
+var state = {q:"", cat:"all"};
+var $ = function(id){return document.getElementById(id)};
+var catById = {}; CATS.forEach(function(c){catById[c.id]=c});
+
+function esc(s){return String(s||"").replace(/[&<>"']/g,function(m){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
+
+function toast(msg){
+  var t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove("show")},2200);
+}
+
+function openForm(){
+  if(FORM_URL){ window.location.href = FORM_URL; }
+  else { toast("Form coming soon - send updates in the WeChat group for now 🙏"); }
+}
+
+function copyText(text){
+  function ok(){toast("WeChat ID copied: "+text)}
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok,fallback);
+  } else fallback();
+  function fallback(){
+    var a=document.createElement("textarea"); a.value=text; document.body.appendChild(a);
+    a.select(); try{document.execCommand("copy"); ok()}catch(e){toast("WeChat ID: "+text)}
+    document.body.removeChild(a);
+  }
+}
+
+/* Map links that work in China (no VPN needed) */
+function mapLinks(r){
+  var kw = encodeURIComponent(r.address || r.name);
+  return [
+    {label:"高德地图 Amap", url:"https://uri.amap.com/search?keyword="+kw+"&city=350200&src=xiamenfoodies"},
+    {label:"百度地图 Baidu Maps", url:"https://api.map.baidu.com/place/search?query="+kw+"&region="+encodeURIComponent("厦门")+"&output=html&src=xiamenfoodies"},
+    {label:"Apple Maps (iPhone)", url:"https://maps.apple.com/?q="+kw+"&near="+encodeURIComponent("Xiamen")},
+    {label:"Google Maps (needs VPN)", url:"https://www.google.com/maps/search/?api=1&query="+kw+encodeURIComponent(" Xiamen")}
+  ];
+}
+
+function openMapSheet(r){
+  $("sheetTitle").textContent = "📍 " + r.name;
+  $("sheetLinks").innerHTML = mapLinks(r).map(function(m){
+    return '<a class="sheet-link" href="'+m.url+'">'+m.label+'</a>';
+  }).join("");
+  $("sheet").classList.add("show");
+}
+function closeSheet(){ $("sheet").classList.remove("show"); }
+
+function statusTag(r){
+  if(r.status==="open") return '<span class="tag open">✅ Open</span>';
+  if(r.status==="closed") return '<span class="tag closed">❌ Closed</span>';
+  return '<span class="tag check">❓ Not checked yet</span>';
+}
+
+function card(r, i){
+  var c = catById[r.cat] || CATS[0];
+  var h = '<div class="card"><div class="top"><div class="emoji">'+c.emoji+'</div><div>'
+        + '<p class="name">'+esc(r.name)+'</p><p class="cuisine">'+esc(r.cuisine)+'</p></div></div>'
+        + '<div class="tags">'+statusTag(r)
+        + (r.area?'<span class="tag">📍 '+esc(r.area)+'</span>':'')
+        + (r.price?'<span class="tag">'+esc(r.price)+'</span>':'')
+        + '</div><div class="actions">'
+        + '<button class="btn primary" data-map="'+R.indexOf(r)+'">📍 Map</button>';
+  if(r.phone) h += '<a class="btn" href="tel:'+esc(r.phone.replace(/\s/g,""))+'">📞 Call</a>';
+  if(r.wechat) h += '<button class="btn" data-wx="'+esc(r.wechat)+'">💬 WeChat</button>';
+  if(!r.phone && !r.wechat) h += '<button class="btn ghost" data-form="1">➕ Add contact</button>';
+  h += '</div></div>';
+  return h;
+}
+
+function matches(r){
+  if(state.cat!=="all" && r.cat!==state.cat) return false;
+  if(!state.q) return true;
+  var c = catById[r.cat];
+  var hay = [r.name,r.cuisine,r.area,r.tags,c?c.label:""].join(" ").toLowerCase();
+  return state.q.toLowerCase().split(/\s+/).every(function(w){return hay.indexOf(w)>-1});
+}
+
+function render(){
+  var list = R.filter(matches).sort(function(a,b){
+    return (a.status==="closed")-(b.status==="closed") || a.name.localeCompare(b.name);
+  });
+  $("count").textContent = list.length + (list.length===1?" place":" places");
+  $("list").innerHTML = list.length ? list.map(card).join("")
+    : '<div class="empty">😕 Nothing found for "'+esc(state.q)+'"<br><br>'
+      + '<button class="btn primary" data-form="1" style="flex:none;padding:10px 16px">➕ Suggest a place</button></div>';
+  $("clear").style.display = state.q ? "block" : "none";
+}
+
+function renderChips(){
+  $("chips").innerHTML = CATS.map(function(c){
+    return '<button class="chip'+(c.id===state.cat?' on':'')+'" data-cat="'+c.id+'">'+c.emoji+' '+c.label+'</button>';
+  }).join("");
+}
+
+$("q").addEventListener("input", function(e){state.q=e.target.value.trim(); render()});
+$("clear").addEventListener("click", function(){$("q").value=""; state.q=""; render(); $("q").focus()});
+$("chips").addEventListener("click", function(e){
+  var b=e.target.closest("[data-cat]"); if(!b) return;
+  state.cat=b.getAttribute("data-cat"); renderChips(); render();
+});
+document.addEventListener("click", function(e){
+  var mp=e.target.closest("[data-map]"); if(mp){openMapSheet(R[+mp.getAttribute("data-map")]); return}
+  if(e.target.closest("[data-close]")){closeSheet(); return}
+  var wx=e.target.closest("[data-wx]"); if(wx){copyText(wx.getAttribute("data-wx")); return}
+  if(e.target.closest("[data-form]")) openForm();
+});
+$("fab").addEventListener("click", openForm);
+
+renderChips(); render();
+</script>
+</body>
+</html>
