@@ -35,6 +35,7 @@ var R = [
   {name:"CBD Cafe", cuisine:"CBD café", cat:"brunch", area:"Hubin North Rd", address:"思明区湖滨北路28号建业大厦附楼", mapq:"CBD Cafe 湖滨北路", wechat:"CBD5151128", hours:"10:00 - 22:00", tags:"cafe coffee cbd drinks"},
   {name:"Cho's Cafe & Bar", cuisine:"Brunch / Café & bar", cat:"brunch", area:"Hexiang West Rd", address:"思明区禾祥西路2号禾祥首府之122号", mapq:"chos cafe&bar", hours:"09:00 - 01:00", tags:"breakfast brunch chos coffee pancakes eggs benedict bar late night", note:"Recommended by members for brunch"},
   {name:"Spoiler 黄石", cuisine:"Western / Italian / Steak", cat:"brunch", area:"Several branches", address:"中华城店: 思明区思明南路195号中华城南区2F · 大悦城店: 集美区杏林湾路333号大悦城5楼 · THE SPOILER JFC店: 思明区环岛东路1701号JFC品尚中心B馆 · 云城万科里店: 集美区龙荷二里5-113号", mapq:"SPOILER黄石", multi:true, tags:"breakfast brunch western italian steak pasta", note:"Recommended by members for brunch"},
+  {name:"Dijon 帝戎", cuisine:"Bakery / Coffee", cat:"brunch", area:"Hexiang West Rd (Lianbang Plaza)", address:"思明区禾祥西路联邦广场8号-1", mapq:"帝戎 联邦广场店", hours:"08:00 - 23:00", tags:"bakery bread pastries sandwiches coffee breakfast", note:"Members say: amazing sandwiches and pastries"},
   {name:"Banyan Gelato & Coffee", cuisine:"Gelato / Sandwiches / Pizza", cat:"brunch", area:"Huli - Yuehua Rd", address:"湖里区悦华路151号L101", mapq:"Banyan Gelato 悦华路", hours:"Opens 10:00 daily", tags:"ice cream dessert coffee"},
   {name:"Wild Strawberry Free Market 野草莓自由市场", cuisine:"Light fare / Western", cat:"brunch", area:"Lujiang Rd", address:"思明区鹭江道176号", mapq:"野草莓自由市场", hours:"Mon-Fri 11:00 - 20:00, weekends from 10:00", tags:"market healthy cake western brunch"},
   {name:"Wagas", cuisine:"Healthy & tasty", cat:"brunch", tags:"salad healthy breakfast coffee", status:"unverified"},
@@ -50,12 +51,14 @@ var R = [
   {name:"Forno 那不勒斯披萨店", cuisine:"Neapolitan pizza", cat:"italian", area:"Yuxiu Middle Rd", address:"思明区筼筜街道育秀中路211号103室", mapq:"Forno那不勒斯披萨店", hours:"11:00 - 14:00, 17:00 - 21:00", tags:"italian pizza wood fired"},
   // Mexican / Latin
   {name:"Coyote 墨西哥餐厅", cuisine:"Mexican", cat:"mexican", area:"Guanren Rd", address:"思明区官任路2-20号 (Jianye Rd metro exit 4, 480 m)", mapq:"Coyote墨西哥餐厅", hours:"11:00 - 01:00", tags:"tacos burrito quesadilla mexican"},
+  {name:"Taco Truck 塔可卡车", cuisine:"Tacos (not the same as Taco Taco)", cat:"mexican", area:"Huli - Yuehua Rd", address:"湖里区悦华路151号L108室", mapq:"塔可卡车TACO TRUCK", hours:"11:00 - 14:30, 16:00 - 21:00", tags:"tacos mexican burrito truck"},
   {name:"Taco Taco 嗒呵嗒呵", cuisine:"Tacos", cat:"mexican", area:"Hubin North Rd (Binbei branch)", address:"思明区湖滨北路28号2-102单元", mapq:"TACO TACO嗒呵嗒呵 滨北店", hours:"10:30 - 21:00", multi:true, tags:"mexican burrito tacos"},
   {name:"Mojar 么哈", cuisine:"Mexican", cat:"mexican", area:"Jimei / Xiang'an - several branches", address:"集美店: 集美区集美大道与兑山西路交叉口 · 泰禾天街店 (bar): 翔安区西岩一里3 · 么哈STEPS 云城万科里: 集美区兑山西路龙荷二里3号", mapq:"么哈MOJAR", multi:true, tags:"tacos burrito mexican jimei"},
   {name:"Loco Burrito", cuisine:"Burritos / Mexican", cat:"mexican", area:"Hubin area (near MixC)", address:"思明区湖滨三里2号102室", mapq:"LocoBurrito", hours:"11:00 - 21:00 (closed Tuesday)", tags:"burrito mexican tacos beef"},
   {name:"Tiki Tapas TT西班牙餐吧", cuisine:"Spanish tapas bar", cat:"mexican", area:"Huli - Gudishi", address:"湖里区金边路566-107航空古地石广场B区G006", mapq:"Tikitapas TT西班牙餐吧", hours:"17:00 - 02:00", tags:"spanish tapas latin bar sports late night"},
   // Indian / Middle Eastern
   {name:"Indiano 印度风", cuisine:"Indian", cat:"indian", area:"Huli - Jiangtou", address:"湖里区江头北路69号", mapq:"印度风 江头中心店", hours:"11:30 - 22:30", tags:"curry naan masala indian johns samrat"},
+  {name:"Tiryaki Turkish Halal Restaurant 特丽雅齐", cuisine:"Turkish (halal)", cat:"indian", area:"Zhonghua City (中华城)", address:"思明区思明南路195号中华城北区", mapq:"Tiryaki Turkish Helal Restoran", hours:"12:00 - 23:00", tags:"turkish halal kebab bbq middle eastern tiryski", note:"Members say: very warm owner - a must if you like Turkish food"},
   {name:"Curry House 47咖喱东南亚餐馆", cuisine:"Malaysian / South Indian curry", cat:"indian", area:"Xiaoxue Rd", address:"思明区小学路90号", mapq:"47咖喱东南亚餐馆", hours:"11:30 - 23:00", tags:"curry malaysian satay indonesian"},
   {name:"Gagan 天宫印巴餐厅", cuisine:"Indian / Pakistani", cat:"indian", area:"Baolong One City", address:"思明区宝龙一城L1", mapq:"天宫印巴餐厅", tags:"curry halal naan gangan indian pakistani"},
   {name:"Sham Arabic Restaurant 萨穆阿拉伯餐厅", cuisine:"Lebanese / Middle Eastern", cat:"indian", area:"Changqing Rd (Tongbao Building)", address:"思明区长青路1-3号通宝大厦", mapq:"萨穆阿拉伯餐厅 通宝大厦店", hours:"09:30 - 23:00", tags:"halal shawarma hummus arabic middle eastern late night"},
@@ -72,6 +75,9 @@ var R = [
   {name:"Dai Mei 傣妹早晚点", cuisine:"Dai / Yunnan rice noodles", cat:"asian", area:"Xiahe Rd", address:"思明区厦禾路规划9大同学府F1层", mapq:"傣妹早晚点 思北店", hours:"11:00 - 16:30, 17:30 - 21:00", tags:"chinese noodles yunnan dai"},
   {name:"Dai Tai 傣泰", cuisine:"Yunnan / Dai & Thai", cat:"asian", area:"Jianye Rd", address:"思明区建业路18号阳明楼F1层", mapq:"Dai Tai 傣泰", hours:"11:30 - 14:00, 17:30 - 22:00", tags:"chinese yunnan dai thai"},
   // Korean
+  {name:"Min He Nan 闽和南", cuisine:"Minnan / Fujian (upscale)", cat:"chinese", area:"3 branches", address:"万象城店 (MixC): 思明区禾祥东路万象城3楼328商铺 · 国贸中心店: 湖里区仙岳路4686-4688号国贸金融中心 · K11 Select店: 湖里区顶石路6号 K11 Select L3", mapq:"闽和南", multi:true, tags:"chinese fujian minnan local fancy mixc k11 michelin", note:"Fancy local Minnan food - Michelin Bib Gourmand recommended"},
+  {name:"Yunlan Impression 云蓝印象云南菜", cuisine:"Yunnan", cat:"chinese", area:"3 branches", address:"湾悦城店 (One Park): 湖里区日圆二里1号湾悦城03楼L3-001 · 莲花店: 思明区嘉莲里7号 · 阿罗海店: 海沧区滨湖北二路阿罗海城市广场一楼", mapq:"云蓝印象云南菜", multi:true, tags:"chinese yunnan potato beef mint one park", note:"Members love the potato dishes and the beef wrapped around mint (One Park branch)"},
+  {name:"Améigo Restaurant", cuisine:"Yunnan", cat:"chinese", area:"Jimei - Joy City, 4th floor", mapq:"厦门大悦城 云南菜", tags:"chinese yunnan shrimp beef mint pickled vegetables jimei joy city ameigo amigo", note:"Must-try shrimp (spicy tomato or mushroom sauce), beef with mint; outdoor tables with a nice view"},
   {name:"Lao Chongqing 老重庆新港店", cuisine:"Sichuan / Chongqing", cat:"chinese", area:"Hubin North Rd (Xingang Plaza)", address:"思明区湖滨北路18号新港广场东楼D1", mapq:"老重庆新港店", hours:"11:00 - 14:00, 17:00 - 22:30", tags:"chinese sichuan chongqing spicy laziji la zi ji old chongqing"},
   {name:"首锦屋炸鸡·年糕火锅", cuisine:"Korean fried chicken / Tteokbokki hotpot", cat:"korean", area:"Jimei", address:"集美区岑东路148号", mapq:"首锦屋炸鸡年糕火锅", hours:"11:00 - 14:00, 16:30 - 21:00", tags:"chicken hotpot korean jimei"},
   {name:"Yanqing 焰请烤肉铺子", cuisine:"Korean BBQ", cat:"korean", area:"Jimei - Joy City", address:"集美区杏林湾路33号厦门大悦城5楼", mapq:"焰请烤肉铺子 厦门大悦城店", hours:"10:00 - 24:00", tags:"bbq barbecue korean joy city jimei service", note:"Excellent service - Haidilao level"},
@@ -83,7 +89,7 @@ var R = [
   // Western / BBQ / Burgers
   {name:"The Void", cuisine:"Western", cat:"western", tags:"", status:"unverified"},
   {name:"Lone Star 孤星汉堡", cuisine:"American burgers", cat:"western", area:"Hubin North Rd", address:"思明区湖滨北路42-4号102室", mapq:"LONE STAR孤星汉堡", hours:"11:30 - 21:00 (closed Tuesday)", tags:"burger american"},
-  {name:"Vagabond", cuisine:"American", cat:"western", tags:"burger", status:"unverified"},
+  {name:"Vagabond", cuisine:"American", cat:"western", status:"closed", tags:"burger"},
   {name:"Jacky Angela Steakhouse", cuisine:"Steakhouse", cat:"western", area:"Marco Polo Hotel", address:"思明区建业路8号马哥孛罗大酒店101号商铺", mapq:"思明区建业路8号马哥孛罗大酒店", tags:"steak marco polo fine dining"},
   {name:"Hot Iron", cuisine:"Barbecue", cat:"western", tags:"bbq", status:"unverified"},
   {name:"Bravo Burger 百万万汉堡", cuisine:"Burgers", cat:"western", area:"Shapowei", address:"思明区大学路129-103号 (alley right of 三味酥屋 + 海蛎煎店)", mapq:"百万万汉堡 沙坡尾创意巷店", hours:"11:00 - 22:00", tags:"american burger shapowei"},
@@ -94,6 +100,7 @@ var R = [
   // Fusion
   {name:"COMMUNE 幻师", cuisine:"Bar & Western food", cat:"fusion", area:"Huli - several branches", address:"K11 Select (湖里区浦东路12号 C馆1层) · 湾悦城 (湖里区五缘湾道日圆二里1号) · 古地石 (湖里区金边路航空古地石广场A区1层)", mapq:"COMMUNE幻师", multi:true, tags:"western drinks beer bar k11 wuyuan bay"},
   {name:"ADLIB 即兴", cuisine:"Chinese-Western fusion / Western", cat:"fusion", area:"2 branches", address:"① 即兴ADLIB A PLEA - 思明区磐基名品中心一楼北门1号 (late night) ② 即兴ADLIB 退化公园店 - 思明区斗西路156-158号亚珠大酒楼6楼", mapq:"即兴ADLIB", multi:true, tags:"chinese western fusion paragon late night bar brunch", note:"Members recommend it for brunch"},
+  {name:"Pennehut 畔尼意面", cuisine:"Pasta & rice bowls", cat:"fusion", area:"SM Mall, phase 3", mapq:"Pennehut畔尼意面", tags:"pasta italian rice bowl beef stew sm", note:"Members say: really good"},
   {name:"4 People", cuisine:"Contemporary", cat:"fusion", tags:"", status:"unverified"},
   {name:"UNDEFINED 慢·直火料理", cuisine:"Wood-fire grill / Creative", cat:"fusion", area:"Convention Center", address:"思明区吕岭路1819-1号107室 (Metro Line 2, Software Park Phase II, exit 3)", mapq:"慢UNDEFINED直火料理", hours:"11:00 - 22:00", tags:"steak grill bbq new western lunch set", note:"New - opened Nov 2026"}
 ];
