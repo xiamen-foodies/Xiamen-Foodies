@@ -31,6 +31,9 @@
   .chips::-webkit-scrollbar{display:none}
   .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink);
     padding:8px 12px;border-radius:999px;font-size:14px;cursor:pointer;white-space:nowrap}
+  .areas{padding-top:4px;align-items:center}
+  .alab{font-size:13px;color:var(--muted);font-weight:600;margin-right:2px}
+  .areas .chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
   .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
   .meta{display:flex;justify-content:space-between;align-items:center;padding:6px 18px;
     color:var(--muted);font-size:13px}
@@ -94,6 +97,7 @@
 </header>
 
 <div class="chips" id="chips"></div>
+<div class="chips areas" id="areas"></div>
 <div class="meta"><span id="count"></span><span>Updated Nov 2026</span></div>
 <div class="notice">⚠️ Info is shared by members and may change. Please check the map or call before you go.</div>
 
@@ -102,6 +106,16 @@
 
 <button class="fab" id="fab">➕ Add a place / Report closed</button>
 <div class="toast" id="toast"></div>
+
+<div class="sheet" id="menuBox">
+  <div class="sheet-bg" data-mclose="1"></div>
+  <div class="sheet-box" style="text-align:center">
+    <p class="sheet-title" id="menuTitle"></p>
+    <p class="sheet-sub">In WeChat: long-press the code → <b>识别图中二维码 / Scan QR code in image</b> to see the menu</p>
+    <img id="menuImg" alt="Menu QR code" style="width:78%;max-width:320px;border-radius:12px;margin:6px auto 4px;display:block">
+    <button class="sheet-cancel" data-mclose="1">Close</button>
+  </div>
+</div>
 
 <div class="sheet" id="sheet">
   <div class="sheet-bg" data-close="1"></div>
@@ -135,7 +149,23 @@ var CATS = [
 ];
 
 /* ===== APP ===== */
-var state = {q:"", cat:"all"};
+var state = {q:"", cat:"all", area:"all"};
+var AREAS = [
+  {id:"all", label:"All areas"},
+  {id:"siming", label:"Siming 思明", zh:"思明区"},
+  {id:"huli", label:"Huli 湖里", zh:"湖里区"},
+  {id:"jimei", label:"Jimei 集美", zh:"集美区"},
+  {id:"haicang", label:"Haicang 海沧", zh:"海沧区"},
+  {id:"tongan", label:"Tong'an 同安", zh:"同安区"},
+  {id:"xiangan", label:"Xiang'an 翔安", zh:"翔安区"}
+];
+function districts(r){
+  if(r._d) return r._d;
+  var t=(r.address||"")+" "+JSON.stringify(r.branches||[]);
+  var d=AREAS.filter(function(a){return a.zh && t.indexOf(a.zh)>-1}).map(function(a){return a.id});
+  if(r.district) d.push(r.district);
+  return (r._d=d);
+}
 var $ = function(id){return document.getElementById(id)};
 var catById = {}; CATS.forEach(function(c){catById[c.id]=c});
 
@@ -180,6 +210,11 @@ function openMapSheet(r){
   }).join("");
   $("sheet").classList.add("show");
 }
+function openMenu(src,name){
+  $("menuTitle").textContent="📖 "+name;
+  $("menuImg").src=src;
+  $("menuBox").classList.add("show");
+}
 function closeSheet(){ $("sheet").classList.remove("show"); }
 
 function statusTag(r){
@@ -198,11 +233,13 @@ function card(r, i){
         + '</div>'
         + (r.note?'<p class="info">💬 '+esc(r.note)+'</p>':'')
         + (r.address?'<p class="info addr">📍 <span>'+esc(r.address)+'</span><button class="copy" data-copy="'+esc(r.address)+'">📋 Copy</button></p>':'')
+        + (r.branches?r.branches.map(function(b){return '<p class="info addr">📍 <span><b>'+esc(b[0])+':</b> '+esc(b[1])+'</span><button class="copy" data-copy="'+esc(b[1])+'">📋 Copy</button></p>';}).join(''):'')
         + (r.hours?'<p class="info">🕘 '+esc(r.hours)+'</p>':'')
         + '<div class="actions">'
         + '<button class="btn primary" data-map="'+R.indexOf(r)+'">📍 Map</button>';
-  if(r.phone) h += '<a class="btn" href="tel:'+esc(r.phone.replace(/\s/g,""))+'">📞 Call</a>';
+  if(r.phone) h += '<button class="btn" data-call="'+esc(r.phone)+'">📞 Phone</button>';
   if(r.wechat) h += '<button class="btn" data-wx="'+esc(r.wechat)+'">💬 WeChat</button>';
+  if(r.menu) h += '<button class="btn" data-menu="'+esc(r.menu)+'" data-mname="'+esc(r.name)+'">📖 Menu</button>';
   h += '</div>';
   if(!r.phone && !r.wechat) h += '<p class="nocontact">📞 No contact yet - if you have their phone or WeChat, feel free to share it in the group 🙏</p>';
   h += '</div>';
@@ -211,9 +248,10 @@ function card(r, i){
 
 function matches(r){
   if(state.cat!=="all" && r.cat!==state.cat) return false;
+  if(state.area!=="all" && districts(r).indexOf(state.area)<0) return false;
   if(!state.q) return true;
   var c = catById[r.cat];
-  var hay = [r.name,r.cuisine,r.area,r.address,r.note,r.tags,c?c.label:""].join(" ").toLowerCase();
+  var hay = [districts(r).join(" "),r.name,r.cuisine,r.area,r.address,(r.branches||[]).join(" "),r.note,r.tags,c?c.label:""].join(" ").toLowerCase();
   return state.q.toLowerCase().split(/\s+/).every(function(w){return hay.indexOf(w)>-1});
 }
 
@@ -228,6 +266,13 @@ function render(){
   $("clear").style.display = state.q ? "block" : "none";
 }
 
+function renderAreas(){
+  $("areas").innerHTML = '<span class="alab">📍 Area</span>' + AREAS.filter(function(a){
+    return a.id==="all" || R.some(function(r){return districts(r).indexOf(a.id)>-1});
+  }).map(function(a){
+    return '<button class="chip'+(a.id===state.area?' on':'')+'" data-area="'+a.id+'">'+a.label+'</button>';
+  }).join("");
+}
 function renderChips(){
   $("chips").innerHTML = CATS.map(function(c){
     return '<button class="chip'+(c.id===state.cat?' on':'')+'" data-cat="'+c.id+'">'+c.emoji+' '+c.label+'</button>';
@@ -236,20 +281,28 @@ function renderChips(){
 
 $("q").addEventListener("input", function(e){state.q=e.target.value.trim(); render()});
 $("clear").addEventListener("click", function(){$("q").value=""; state.q=""; render(); $("q").focus()});
+$("areas").addEventListener("click", function(e){
+  var b=e.target.closest("[data-area]"); if(!b) return;
+  state.area=b.getAttribute("data-area"); renderAreas(); render();
+});
 $("chips").addEventListener("click", function(e){
   var b=e.target.closest("[data-cat]"); if(!b) return;
-  state.cat=b.getAttribute("data-cat"); renderChips(); render();
+  state.cat=b.getAttribute("data-cat"); renderChips(); renderAreas(); render();
 });
 document.addEventListener("click", function(e){
   var mp=e.target.closest("[data-map]"); if(mp){openMapSheet(R[+mp.getAttribute("data-map")]); return}
   if(e.target.closest("[data-close]")){closeSheet(); return}
+  var mn=e.target.closest("[data-menu]"); if(mn){openMenu(mn.getAttribute("data-menu"),mn.getAttribute("data-mname")); return}
+  if(e.target.closest("[data-mclose]")){$("menuBox").classList.remove("show"); return}
+  var cl=e.target.closest("[data-call]"); if(cl){var num=cl.getAttribute("data-call");
+    copyText(num,"Phone number copied: "+num); return}
   var cp=e.target.closest("[data-copy]"); if(cp){copyText(cp.getAttribute("data-copy"),"Address copied ✅"); return}
   var wx=e.target.closest("[data-wx]"); if(wx){copyText(wx.getAttribute("data-wx")); return}
   if(e.target.closest("[data-form]")) openForm();
 });
 $("fab").addEventListener("click", openForm);
 
-renderChips(); render();
+renderChips(); renderAreas(); render();
 </script>
 </body>
 </html>
