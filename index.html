@@ -51,6 +51,9 @@
   .tag.open{background:#e3f5ea;color:var(--ok)}
   .tag.warn{background:#fff0e0;color:#b8580f}
   .tag.closed{background:#fbe4e1;color:var(--bad)}
+  .closedbr span,.closedbr b{color:var(--bad)}
+  .closedbr span{text-decoration:line-through;text-decoration-color:rgba(192,57,43,.5)}
+  .closedbr b{text-decoration:none}
   .addr{display:flex;align-items:flex-start;gap:6px}
   .addr span{flex:1}
   .copy{flex:0 0 auto;border:1px solid var(--line);background:#f6f1eb;color:var(--ink);border-radius:8px;font-size:12px;padding:3px 8px;cursor:pointer;font-family:inherit}
@@ -232,7 +235,7 @@ function card(r, i){
         + '</div>'
         + (r.note?'<p class="info">💬 '+esc(r.note)+'</p>':'')
         + (r.address?'<p class="info addr">📍 <span>'+esc(r.address)+'</span><button class="copy" data-copy="'+esc(r.address)+'">📋 Copy</button></p>':'')
-        + (r.branches?r.branches.map(function(b){return '<p class="info addr">📍 <span><b>'+esc(b[0])+':</b> '+esc(b[1])+'</span><button class="copy" data-copy="'+esc(b[1])+'">📋 Copy</button></p>';}).join(''):'')
+        + (r.branches?r.branches.map(function(b){var cl=/closed/i.test(b[0]);return '<p class="info addr'+(cl?' closedbr':'')+'">'+(cl?'❌':'📍')+' <span><b>'+esc(b[0])+':</b> '+esc(b[1])+'</span><button class="copy" data-copy="'+esc(b[1])+'">📋 Copy</button></p>';}).join(''):'')
         + (r.hours?'<p class="info">🕘 '+esc(r.hours)+'</p>':'')
         + '<div class="actions">'
         + '<button class="btn primary" data-map="'+R.indexOf(r)+'">📍 Map</button>';

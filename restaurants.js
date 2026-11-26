@@ -39,7 +39,7 @@ var R = [
   {name:"Cho's Cafe & Bar", cuisine:"Brunch / Café & bar", cat:"brunch", area:"Hexiang West Rd", address:"思明区禾祥西路2号禾祥首府之122号", mapq:"chos cafe&bar", hours:"09:00 - 01:00", tags:"breakfast brunch chos coffee pancakes eggs benedict bar late night", note:"Recommended by members for brunch"},
   {name:"Spoiler 黄石", cuisine:"Western / Italian / Steak", cat:"brunch", area:"Several branches", branches:[["中华城店", "思明区思明南路195号中华城南区2F"], ["大悦城店", "集美区杏林湾路333号大悦城5楼"], ["THE SPOILER JFC店", "思明区环岛东路1701号JFC品尚中心B馆"], ["云城万科里店", "集美区龙荷二里5-113号"]], mapq:"SPOILER黄石", multi:true, tags:"breakfast brunch western italian steak pasta", note:"Recommended by members for brunch"},
   {name:"Dijon 帝戎", cuisine:"Bakery / Coffee", cat:"brunch", area:"Hexiang West Rd (Lianbang Plaza)", address:"思明区禾祥西路联邦广场8号-1", mapq:"帝戎 联邦广场店", hours:"08:00 - 23:00", tags:"bakery bread pastries sandwiches coffee breakfast", note:"Members say: amazing sandwiches and pastries"},
-  {name:"Banyan Gelato & Coffee", cuisine:"Gelato / Sandwiches / Pizza", cat:"brunch", area:"Huli - Yuehua Rd", address:"湖里区悦华路151号L101", mapq:"Banyan Gelato 悦华路", hours:"Opens 10:00 daily", tags:"ice cream dessert coffee"},
+  {name:"Banyan Gelato & Coffee", cuisine:"Gelato / Sandwiches / Pizza", cat:"brunch", area:"Binbei - next to CBD Cafe", branches:[["NEW: next to CBD Cafe (建业大厦)", "思明区湖滨北路28号建业大厦附楼"], ["Yuehua Rd - temporarily closed", "湖里区悦华路151号L101"]], mapq:"CBD Cafe 湖滨北路", tags:"ice cream dessert coffee gelato jianye binbei", note:"Moved next to CBD Cafe in the Jianye Building. The old Yuehua Rd shop is temporarily closed"},
   {name:"Wild Strawberry Free Market 野草莓自由市场", cuisine:"Light fare / Western", cat:"brunch", area:"Lujiang Rd", address:"思明区鹭江道176号", mapq:"野草莓自由市场", hours:"Mon-Fri 11:00 - 20:00, weekends from 10:00", tags:"market healthy cake western brunch"},
   {name:"Wagas", cuisine:"Healthy & tasty", cat:"brunch", tags:"salad healthy breakfast coffee", status:"unverified"},
   // Italian / Pizza
@@ -71,6 +71,7 @@ var R = [
   {name:"Mignons", cuisine:"Vietnamese", cat:"asian", status:"closed", tags:"minions pho"},
   {name:"Thai Rice House 泰香米", cuisine:"Thai / Southeast Asian", cat:"asian", area:"MixC Mall", address:"思明区禾祥东路99号厦门万象城517", mapq:"泰香米 厦门万象城店", hours:"11:00 - 22:00", tags:"thai curry mixc"},
   {name:"Thaizhijia 泰之家泰国菜", cuisine:"Thai", cat:"asian", area:"Haian St", address:"思明区海岸街2号102商铺", mapq:"泰之家泰国菜 故宫路店", hours:"11:00 - 14:00, 17:00 - 21:00", tags:"thai curry mango sticky rice"},
+  {name:"Shogun 将军餐厅", cuisine:"Japanese teppanyaki", cat:"asian", area:"Marco Polo Hotel, 2nd floor", address:"思明区建业路8号马哥孛罗东方大酒店2楼", mapq:"厦门马哥孛罗东方大酒店 将军餐厅", tags:"japanese teppanyaki shogun marco polo binbei", note:"Teppanyaki - the chef cooks in front of you. Inside the Marco Polo Hotel, 2nd floor. Recommended by members"},
   {name:"Tonkatsu 03 日式炸猪排", cuisine:"Japanese pork cutlet", cat:"asian", area:"Douxi Rd", address:"思明区斗西路156祥和广场F6层", mapq:"TONKATSU 03日式炸猪排 退化公园店", hours:"11:30 - 14:00, 17:00 - 20:30", tags:"japanese pork cutlet"},
   {name:"BANDUNG", cuisine:"Indonesian", cat:"asian", tags:"halal", status:"unverified"},
   {name:"MABUHAY", cuisine:"Filipino (Pinoy)", cat:"asian", tags:"philippines"},
@@ -86,7 +87,7 @@ var R = [
   {name:"Yanqing 焰请烤肉铺子", cuisine:"Korean BBQ", cat:"korean", area:"Jimei - Joy City", address:"集美区杏林湾路33号厦门大悦城5楼", mapq:"焰请烤肉铺子 厦门大悦城店", hours:"10:00 - 24:00", tags:"bbq barbecue korean joy city jimei service", note:"Excellent service - Haidilao level"},
   // European
   {name:"Golden Olives G.O今橄榄", cuisine:"Greek", cat:"european", area:"Paragon Center", address:"思明区嘉禾路199号磐基名品中心G层", mapq:"G.O今橄榄 磐基中心店", hours:"11:00 - 23:00", tags:"mediterranean greek paragon"},
-  {name:"Ay Manuela", cuisine:"Spanish", cat:"european", area:"Yundang", address:"思明区官任路与筼筜路交叉口北120米", mapq:"Manuela 官任路", hours:"10:00 - 22:30", tags:"tapas paella spanish seafood", wechat:"manusoria"},
+  {name:"Ay Manuela", cuisine:"Spanish", cat:"european", area:"Yundang", address:"思明区官任路与筼筜路交叉口北120米", mapq:"Manuela 官任路", hours:"10:00 - 22:30 (closed Mondays)", tags:"tapas paella spanish seafood", wechat:"manusoria"},
   {name:"Greg's 法国餐厅", cuisine:"French", cat:"european", area:"Xidi Coffee Street", address:"思明区建业路吉祥家园1-106", mapq:"Greg's厦门法国餐厅 西堤咖啡街店", hours:"Mon-Fri 11:30 - 14:30, 17:30 - 21:30 (weekend hours differ)", tags:"french fine dining date xidi"},
   {name:"Odenwalder", cuisine:"German", cat:"european", tags:"beer sausage", status:"unverified"},
   // Western / BBQ / Burgers
